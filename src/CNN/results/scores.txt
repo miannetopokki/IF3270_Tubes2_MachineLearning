@@ -1,0 +1,66 @@
+Eksperimen: cnn_1_conv_layers
+  Details: Config: [{'filters': 32, 'kernel_size': (3, 3), 'activation': 'relu'}]
+  Macro F1-Score: 0.1954
+  Test Loss: 1.1088
+  Test Accuracy: 0.6396
+------------------------------
+Eksperimen: cnn_2_conv_layers
+  Details: Config: [{'filters': 32, 'kernel_size': (3, 3), 'activation': 'relu'}, {'filters': 64, 'kernel_size': (3, 3), 'activation': 'relu'}]
+  Macro F1-Score: 0.1957
+  Test Loss: 0.9631
+  Test Accuracy: 0.6906
+------------------------------
+Eksperimen: cnn_3_conv_layers
+  Details: Config: [{'filters': 32, 'kernel_size': (3, 3), 'activation': 'relu'}, {'filters': 64, 'kernel_size': (3, 3), 'activation': 'relu'}, {'filters': 128, 'kernel_size': (3, 3), 'activation': 'relu'}]
+  Macro F1-Score: 0.1957
+  Test Loss: 0.8864
+  Test Accuracy: 0.7247
+------------------------------
+Eksperimen: cnn_filters_16_32
+  Details: Config: [{'filters': 16, 'kernel_size': (3, 3)}, {'filters': 32, 'kernel_size': (3, 3)}]
+  Macro F1-Score: 0.1957
+  Test Loss: 0.9438
+  Test Accuracy: 0.6880
+------------------------------
+Eksperimen: cnn_filters_32_64
+  Details: Config: [{'filters': 32, 'kernel_size': (3, 3)}, {'filters': 64, 'kernel_size': (3, 3)}]
+  Macro F1-Score: 0.1955
+  Test Loss: 0.9694
+  Test Accuracy: 0.6933
+------------------------------
+Eksperimen: cnn_filters_64_128
+  Details: Config: [{'filters': 64, 'kernel_size': (3, 3)}, {'filters': 128, 'kernel_size': (3, 3)}]
+  Macro F1-Score: 0.1957
+  Test Loss: 1.0166
+  Test Accuracy: 0.7079
+------------------------------
+Eksperimen: cnn_kernel_3x3_3x3
+  Details: Config: [{'filters': 32, 'kernel_size': (3, 3)}, {'filters': 64, 'kernel_size': (3, 3)}]
+  Macro F1-Score: 0.1956
+  Test Loss: 0.9553
+  Test Accuracy: 0.7045
+------------------------------
+Eksperimen: cnn_kernel_5x5_5x5
+  Details: Config: [{'filters': 32, 'kernel_size': (5, 5)}, {'filters': 64, 'kernel_size': (5, 5)}]
+  Macro F1-Score: 0.1955
+  Test Loss: 1.1166
+  Test Accuracy: 0.6941
+------------------------------
+Eksperimen: cnn_kernel_mix_3x3_5x5
+  Details: Config: [{'filters': 32, 'kernel_size': (3, 3)}, {'filters': 64, 'kernel_size': (5, 5)}]
+  Macro F1-Score: 0.1956
+  Test Loss: 1.0027
+  Test Accuracy: 0.7005
+------------------------------
+Eksperimen: cnn_max_pooling
+  Details: Pooling type: max
+  Macro F1-Score: 0.1958
+  Test Loss: 0.9412
+  Test Accuracy: 0.7008
+------------------------------
+Eksperimen: cnn_avg_pooling
+  Details: Pooling type: avg
+  Macro F1-Score: 0.1955
+  Test Loss: 0.9134
+  Test Accuracy: 0.6956
+------------------------------
