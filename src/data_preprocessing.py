@@ -6,7 +6,14 @@ from tensorflow import keras
 from sklearn.model_selection import train_test_split
 
 class NusaXSentimentDataProcessor:
+    '''
+    Kalau mau pakai preprosesor ini, dalam folder harus ada
+    train.csv
+    valid.csv
+    test.csv
 
+    kolom : id,text,label
+    '''
     def __init__(self, data_dir='indonesian', max_features=10000, sequence_length=100):
         self.data_dir = data_dir
         self.max_features = max_features
@@ -25,8 +32,9 @@ class NusaXSentimentDataProcessor:
             return train_data, val_data, test_data
             
         except Exception as e:
-            pass
-    
+            print(f"Failed to load data: {e}")
+            raise 
+            
     def create_vectorize_layer(self, texts):
         self.vectorize_layer = keras.layers.TextVectorization(
             max_tokens=self.max_features,
