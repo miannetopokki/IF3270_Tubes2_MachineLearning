@@ -6,7 +6,7 @@ import tensorflow as tf
 
 def train_and_evaluate_model(model, x_train, y_train, x_val, y_val, x_test, y_test, epochs, batch_size, model_name="model", results_dir="results"):
 
-    print(f"\n--- Melatih Model: {model_name} ---")
+    print(f"\n--- Training Model: {model_name} ---")
 
     history = model.fit(x_train, y_train,
                         epochs=epochs,
@@ -15,10 +15,10 @@ def train_and_evaluate_model(model, x_train, y_train, x_val, y_val, x_test, y_te
                         verbose=1)
 
     # Simpan bobot model
-    if not os.path.exists("saved_models"):
-        os.makedirs("saved_models")
-    model.save_weights(f"saved_models/{model_name}_weights.weights.h5")
-    print(f"Bobot model disimpan di: saved_models/{model_name}_weights.weights.h5")
+    if not os.path.exists("../saved_models"):
+        os.makedirs("../saved_models")
+    model.save_weights(f"../saved_models/{model_name}.weights.h5")
+    print(f"Bobot model disimpan di: saved_models/{model_name}.weights.h5")
 
 
 

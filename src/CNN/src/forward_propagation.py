@@ -239,12 +239,12 @@ class CustomCNN:
         temp_keras_model = build_cnn_model(input_shape_cifar, num_classes_cifar,
                                            conv_config, pooling_type, global_pooling)
         temp_keras_model.load_weights(keras_model_path)
-        print(f"Bobot dari {keras_model_path} berhasil dimuat ke model Keras temporer.")
+        print(f"Bobot dari {keras_model_path} berhasil dimuat ke model Keras.")
 
         # 2. Ekstrak bobot dan bangun layer custom
         for keras_layer in temp_keras_model.layers:
             layer_name = keras_layer.name.lower() # Dapatkan nama layer
-            print(f"Processing Keras layer: {keras_layer.name} ({type(keras_layer)})")
+            # print(f"Processing Keras layer: {keras_layer.name} ({type(keras_layer)})")
 
             if isinstance(keras_layer, tf.keras.layers.Conv2D):
                 weights, biases = keras_layer.get_weights()
@@ -252,36 +252,36 @@ class CustomCNN:
                 strides = keras_layer.strides
                 padding_keras = keras_layer.padding
                 self.layers.append(Conv2DLayer(weights, biases, strides=strides, padding=padding_keras))
-                print(f"  Added Conv2DLayer (from scratch). Padding: {padding_keras}, Strides: {strides}")
+                # print(f"  Added Conv2DLayer (from scratch). Padding: {padding_keras}, Strides: {strides}")
                 if keras_layer.activation:
                     activation_name = tf.keras.activations.serialize(keras_layer.activation).lower()
                     self.layers.append(ActivationLayer(activation_name))
-                    print(f"  Added ActivationLayer (from scratch): {activation_name}")
+                    # print(f"  Added ActivationLayer (from scratch): {activation_name}")
 
             elif isinstance(keras_layer, (tf.keras.layers.MaxPooling2D, tf.keras.layers.AveragePooling2D)):
                 pool_size = keras_layer.pool_size
                 strides = keras_layer.strides
                 mode = 'max' if isinstance(keras_layer, tf.keras.layers.MaxPooling2D) else 'avg'
                 self.layers.append(PoolingLayer(pool_size=pool_size, strides=strides, mode=mode))
-                print(f"  Added PoolingLayer (from scratch): {mode}, Pool size: {pool_size}, Strides: {strides}")
+                # print(f"  Added PoolingLayer (from scratch): {mode}, Pool size: {pool_size}, Strides: {strides}")
 
             elif isinstance(keras_layer, tf.keras.layers.Flatten):
                 self.layers.append(FlattenLayer())
-                print(f"  Added FlattenLayer (from scratch).")
+                # print(f"  Added FlattenLayer (from scratch).")
 
             elif isinstance(keras_layer, tf.keras.layers.GlobalAveragePooling2D):
                 self.layers.append(GlobalAveragePooling2DLayer())
-                print(f"  Added GlobalAveragePooling2DLayer (from scratch).")
+                # print(f"  Added GlobalAveragePooling2DLayer (from scratch).")
 
             elif isinstance(keras_layer, tf.keras.layers.Dense):
                 weights, biases = keras_layer.get_weights()
                 self.layers.append(DenseLayer(weights, biases))
-                print(f"  Added DenseLayer (from scratch).")
+                # print(f"  Added DenseLayer (from scratch).")
                 if keras_layer.activation:
                     activation_name = tf.keras.activations.serialize(keras_layer.activation).lower()
                     if not (activation_name == 'softmax' and isinstance(self.layers[-2], DenseLayer) and keras_layer == temp_keras_model.layers[-1]):
                          self.layers.append(ActivationLayer(activation_name))
-                         print(f"  Added ActivationLayer (from scratch): {activation_name}")
+                        #  print(f"  Added ActivationLayer (from scratch): {activation_name}")
             elif isinstance(keras_layer, tf.keras.layers.InputLayer):
                 print(f"  Skipping InputLayer.")
             else:
@@ -296,7 +296,7 @@ class CustomCNN:
         for i, layer in enumerate(self.layers):
             output_before_layer = output # Untuk debugging
             output = layer.forward(output)
-            print(f"Layer {i+1} ({type(layer).__name__}): Input shape: {output_before_layer.shape}, Output shape: {output.shape}")
+            # print(f"Layer {i+1} ({type(layer).__name__}): Input shape: {output_before_layer.shape}, Output shape: {output.shape}")
             if np.isnan(output).any():
                 print(f"  WARNING: NaN detected in output of layer {i+1} ({type(layer).__name__})")
         print("--- Forward Propagation (from scratch) Finished ---")
@@ -451,8 +451,8 @@ if __name__ == '__main__':
     y_test_sample_true_labels = y_test[:num_test_samples]
 
 
-    MODEL_TO_TEST_SCRATCH = "cnn_kernel_mix_3x3_5x5" 
-    KERAS_WEIGHTS_PATH = f"saved_models/{MODEL_TO_TEST_SCRATCH}_weights.weights.h5"
+    MODEL_TO_TEST_SCRATCH = "cnn_2_conv_layers" 
+    KERAS_WEIGHTS_PATH = f"saved_models/{MODEL_TO_TEST_SCRATCH}.weights.h5"
 
     if not os.path.exists(KERAS_WEIGHTS_PATH):
         print(f"ERROR: File bobot {KERAS_WEIGHTS_PATH} tidak ditemukan. Latih model terlebih dahulu.")
