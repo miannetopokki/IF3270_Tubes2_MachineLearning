@@ -83,7 +83,7 @@ class LSTMLayer:
         print(f"total timestep: {timesteps}")
         for t in range(timesteps):
             x_t = inputs[:, t, :]  # input pada timestep t
-            print(f"x_t di t-{t}  =  {x_t}")
+            # print(f"x_t di t-{t}  =  {x_t}")
             h_t, c_t = self.lstm_cell.forward(x_t, h_t, c_t)
             outputs.append(h_t)
         

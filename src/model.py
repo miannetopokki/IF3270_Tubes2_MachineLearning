@@ -1,6 +1,7 @@
 import numpy as np
 import tensorflow as tf
 from tensorflow import keras
+from sklearn.metrics import f1_score
 from abc import ABC, abstractmethod
 
 class BaseLayer:
@@ -199,6 +200,17 @@ class NeuralNetworkModel(ABC):
         print("  c_t = f ⊙ c_{t-1} + i ⊙ g           # cell state")
         print("  h_t = o ⊙ tanh(c_t)                  # hidden state")
         print("Dense: y = W·x + b")
+
+    def evaluate(self, x_test, y_test, average='macro', return_output=True):
+        outputs = self.forward(x_test)
+        predicted_classes = np.argmax(outputs, axis=1)
+        
+        f1 = f1_score(y_test, predicted_classes, average=average)
+        print(f"F1 Score ({average}): {f1:.4f}")
+        
+        if return_output:
+            return f1, predicted_classes, outputs
+        
     
     @abstractmethod
     def forward(self, inputs):
