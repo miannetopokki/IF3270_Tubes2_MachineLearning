@@ -181,6 +181,20 @@ class NeuralNetworkModel(ABC):
                     print(f"\nb (Bias Vector):")
                     print(f"  Shape: {b.shape}")
             
+            elif layer_type == 'Bidirectional':
+                if weights:
+                    forward_weights = weights[0:3]
+                    backward_weights = weights[3:6]
+                    print("Bidirectional RNN Layer:")
+                    print("  Forward Layer:")
+                    print(f"    W (Input Weight Matrix): {forward_weights[0].shape}")
+                    print(f"    U (Recurrent Weight Matrix): {forward_weights[1].shape}")
+                    print(f"    b (Bias Vector): {forward_weights[2].shape}")
+                    print("  Backward Layer:")
+                    print(f"    W (Input Weight Matrix): {backward_weights[0].shape}")
+                    print(f"    U (Recurrent Weight Matrix): {backward_weights[1].shape}")
+                    print(f"    b (Bias Vector): {backward_weights[2].shape}")
+            
             if not weights:
                 print("No weights in this layer")
             
