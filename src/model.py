@@ -13,6 +13,30 @@ class BaseLayer:
         pass
 
 class EmbeddingLayer(BaseLayer):
+    '''
+    input shape
+    2D : (batch_size, input_length).
+    output shape
+    3D : (batch_size, input_length, output_dim).
+
+    (1,4)
+    Word index:
+    "saya"  → 1
+    "suka"  → 2
+    "makan" → 3
+    "nasi"  → 4
+
+
+    (1,4,3)
+    Embedding matrix:
+    [
+    [0.00, 0.00, 0.00],     # index 0 (biasanya untuk padding)
+    [0.12, -0.05, 0.33],    # index 1 → "saya"
+    [0.45, 0.10, -0.22],    # index 2 → "suka"
+    [-0.13, 0.03, 0.15],    # index 3 → "makan"
+    [0.08, -0.33, 0.41]     # index 4 → "nasi"
+    ]
+    '''
     def __init__(self, weights, config):
         super().__init__()
         self.embedding_matrix = weights[0].astype(np.float32)
@@ -20,6 +44,7 @@ class EmbeddingLayer(BaseLayer):
         self.output_dim = config['output_dim']   # dimensi vektor embedding tiap token
 
     def forward(self, inputs):
+        inputs = inputs.astype(np.float32)
         # inputs shape: (batch_size, sequence_length)
         batch_size, seq_length = inputs.shape
 
@@ -36,29 +61,31 @@ class EmbeddingLayer(BaseLayer):
 
 
 class DenseLayer(BaseLayer):
+  
     def __init__(self, weights, config):
         super().__init__()
-        self.weights = weights[0].astype(np.float32)  # W
-        self.bias = weights[1].astype(np.float32)     # b
+        self.weights = weights[0].astype(np.float32)
+        self.bias = weights[1].astype(np.float32)
         self.units = config['units']
         self.activation = config.get('activation', None)
-        
 
     def forward(self, inputs):
-        #  y = Wx + b
+        inputs = inputs.astype(np.float32)
+        # y  = Wx + b
         outputs = np.dot(inputs, self.weights) + self.bias
-        
+
         if self.activation == 'relu':
             outputs = np.maximum(0, outputs)
         elif self.activation == 'sigmoid':
             outputs = 1 / (1 + np.exp(-outputs))
-        elif self.activation == 'softmax':
+        elif self.activation == 'softmax': 
             exp_outputs = np.exp(outputs - np.max(outputs, axis=-1, keepdims=True))
             outputs = exp_outputs / np.sum(exp_outputs, axis=-1, keepdims=True)
-        elif self.activation == 'tanh': #feeling gw bakal pake tanh aja, soalnya di spek gk dikasih tau
+        elif self.activation == 'tanh':
             outputs = np.tanh(outputs)
-            
-        return outputs
+
+        return outputs.astype(np.float32)
+
 
 class DropoutLayer(BaseLayer):
     def __init__(self, weights, config):
@@ -66,7 +93,7 @@ class DropoutLayer(BaseLayer):
         self.rate = config['rate']
         
     def forward(self, inputs):
-        return inputs * (1.0 - self.rate)
+        return (inputs.astype(np.float32)) * np.float32(1.0 - self.rate)
 
 class NeuralNetworkModel(ABC):
     def __init__(self, model_input=None):
