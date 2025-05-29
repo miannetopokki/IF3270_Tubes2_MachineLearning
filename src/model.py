@@ -264,6 +264,13 @@ class NeuralNetworkModel(ABC):
         f1 = f1_score(y_test, predicted_classes, average=average)
         print(f"F1 Score ({average}): {f1:.4f}")
         
+        loss = keras.losses.sparse_categorical_crossentropy(y_test, outputs)
+        loss = np.mean(loss)
+        print(f"Loss: {loss:.4f}")
+        
+        accuracy = np.mean(predicted_classes == y_test)
+        print(f"Accuracy: {accuracy:.4f}")
+        
         if return_output:
             return f1, predicted_classes, outputs
         
