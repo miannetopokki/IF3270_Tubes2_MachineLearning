@@ -414,22 +414,7 @@ def test_forward_propagation(x_test_sample, y_test_sample_true_labels,
     print("\nProbabilitas output Keras (sampel pertama, 5 output pertama):", y_pred_keras_proba[0, :5])
     print("Probabilitas output Scratch (sampel pertama, 5 output pertama):", y_pred_scratch_proba[0, :5])
 
-    # Cek apakah ada perbedaan signifikan dalam probabilitas
-    diff = np.abs(y_pred_keras_proba - y_pred_scratch_proba)
-    print(f"\nMaximum absolute difference in probabilities: {np.max(diff)}")
-    print(f"Mean absolute difference in probabilities: {np.mean(diff)}")
-    if np.allclose(y_pred_keras_proba, y_pred_scratch_proba, atol=1e-5): 
-        print("Output probabilitas dari Keras dan Scratch CUKUP DEKAT.")
-    else:
-        print("Output probabilitas dari Keras dan Scratch BERBEDA")
-        # for i in range(len(x_test_sample)):
-        #     if not np.allclose(y_pred_keras_proba[i], y_pred_scratch_proba[i], atol=1e-5):
-        #         print(f"Perbedaan pada sampel {i}:")
-        #         print(f"  Keras: {y_pred_keras_proba[i]}")
-        #         print(f"  Scratch: {y_pred_scratch_proba[i]}")
-        #         break
-
-
+    
     from sklearn.metrics import f1_score
     f1_keras = f1_score(y_test_sample_true_labels, y_pred_keras_labels, average='macro')
     f1_scratch = f1_score(y_test_sample_true_labels, y_pred_scratch_labels, average='macro')
