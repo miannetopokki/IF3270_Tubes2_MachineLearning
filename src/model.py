@@ -13,45 +13,60 @@ class BaseLayer:
         pass
 
 class EmbeddingLayer(BaseLayer):
-    #pakai embedding layer dari keras(dibolehin di spek)
     def __init__(self, weights, config):
         super().__init__()
-        self.keras_embedding = tf.keras.layers.Embedding(
-            input_dim=config['input_dim'],
-            output_dim=config['output_dim'],
-            weights=[weights[0]], 
-            trainable=False
-        )
-        
+        self.embedding_matrix = weights[0].astype(np.float32)
+        self.input_dim = config['input_dim']     # ukuran kosakata (jumlah token unik)
+        self.output_dim = config['output_dim']   # dimensi vektor embedding tiap token
+
     def forward(self, inputs):
-        return self.keras_embedding(inputs).numpy()
+        # inputs shape: (batch_size, sequence_length)
+        batch_size, seq_length = inputs.shape
+
+        # output shape: (batch_size, sequence_length, embedding_dim)
+        output = np.zeros((batch_size, seq_length, self.output_dim), dtype=np.float32)
+
+        for i in range(batch_size):
+            for j in range(seq_length):
+                idx = int(inputs[i, j])  # token index
+                if 0 <= idx < self.input_dim:
+                    output[i, j] = self.embedding_matrix[idx]
+        
+        return output
+
 
 class DenseLayer(BaseLayer):
-    #pakai dense layer dari keras
     def __init__(self, weights, config):
         super().__init__()
-        self.keras_dense = tf.keras.layers.Dense(
-            units=config['units'],
-            activation=config.get('activation', None),
-            use_bias=True
-        )
-        input_dim = weights[0].shape[0]
-        self.keras_dense.build((None, input_dim))
-        self.keras_dense.set_weights([weights[0], weights[1]])
-        self.keras_dense.trainable = False
+        self.weights = weights[0].astype(np.float32)  # W
+        self.bias = weights[1].astype(np.float32)     # b
+        self.units = config['units']
+        self.activation = config.get('activation', None)
         
+
     def forward(self, inputs):
-        return self.keras_dense(inputs).numpy()
+        #  y = Wx + b
+        outputs = np.dot(inputs, self.weights) + self.bias
+        
+        if self.activation == 'relu':
+            outputs = np.maximum(0, outputs)
+        elif self.activation == 'sigmoid':
+            outputs = 1 / (1 + np.exp(-outputs))
+        elif self.activation == 'softmax':
+            exp_outputs = np.exp(outputs - np.max(outputs, axis=-1, keepdims=True))
+            outputs = exp_outputs / np.sum(exp_outputs, axis=-1, keepdims=True)
+        elif self.activation == 'tanh': #feeling gw bakal pake tanh aja, soalnya di spek gk dikasih tau
+            outputs = np.tanh(outputs)
+            
+        return outputs
 
 class DropoutLayer(BaseLayer):
     def __init__(self, weights, config):
         super().__init__()
-        self.keras_dropout = tf.keras.layers.Dropout(
-            rate=config['rate']
-        )
+        self.rate = config['rate']
         
     def forward(self, inputs):
-        return self.keras_dropout(inputs, training=False).numpy()
+        return inputs * (1.0 - self.rate)
 
 class NeuralNetworkModel(ABC):
     def __init__(self, model_input=None):
