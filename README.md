@@ -1,8 +1,15 @@
 # Indonesian Sentiment Prediction
 
-This repository contains a machine learning project focused on sentiment analysis for Indonesian text. The project implements and compares different neural network architectures (LSTM, RNN, CNN) for classifying sentiment in Indonesian text.
+This repository contains a machine learning project focused on sentiment analysis for Indonesian text. The project implements and compares different neural network architectures (LSTM, RNN) for classifying sentiment in Indonesian text.
 
 ![Model Prediction Results](images/screenshot1.png)
+
+
+# Image Classification
+This repository contains a machine learning project focused on image classification using Convolutional Neural Networks (CNNs) with the CIFAR-10 dataset. The project's main focus is on implementing Forward Propagation for CNNs and comparing multiple hyperparameters to understand their effects on model performance.
+
+![Model Prediction Result](images/screenshot2.png)
+
 ## Overview
 
 
@@ -30,6 +37,13 @@ The project uses the [NusaX sentiment dataset for Indonesian language](https://g
 - Positive sentiment
 - Neutral sentiment
 - Negative sentiment
+
+For the image classification task, this project also uses the [CIFAR-10 dataset](https://www.cs.toronto.edu/~kriz/cifar.html).
+- The dataset contains 60,000 32x32 color images in 10 classes (6,000 images per class).
+- In this project, the data is utilized as follows:
+    - Training set: 40,000 images
+    - Validation set: 10,000 images (derived from the original 50,000 training images)
+    - Test set: 10,000 images
 
 ## Installation
 
